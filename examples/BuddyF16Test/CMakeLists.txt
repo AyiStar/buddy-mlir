@@ -32,13 +32,13 @@ SET_TARGET_PROPERTIES(
   LINKER_LANGUAGE C
 )
 
-add_executable(buddy-f16add-run f16add-main.cpp fp16_h2f.cpp fp16_f2h.cpp)
-target_link_directories(buddy-f16add-run PRIVATE ${LLVM_MLIR_LIBRARY_DIR})
-target_include_directories(buddy-f16add-run PRIVATE ${LLVM_MLIR_LIBRARY_DIR}/../../../)
+add_executable(buddy-f16test-run f16add-main.cpp fp16_h2f.cpp fp16_f2h.cpp)
+target_link_directories(buddy-f16test-run PRIVATE ${LLVM_MLIR_LIBRARY_DIR})
+target_include_directories(buddy-f16test-run PRIVATE ${LLVM_MLIR_LIBRARY_DIR}/../../../)
 
 set(BUDDY_F16ADD_LIBS
   F16ADD
   mlir_c_runner_utils
 )
 
-target_link_libraries(buddy-f16add-run ${BUDDY_F16ADD_LIBS})
+target_link_libraries(buddy-f16test-run ${BUDDY_F16ADD_LIBS})
