@@ -1,4 +1,4 @@
-# Buddy Compiler F16Tet Example
+# Buddy Compiler F16Test Example
 
 The purpose of this example is to test the FP16&BP16 data type support.
 In detail, we construct a naive torch computation graph:
