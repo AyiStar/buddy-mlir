@@ -9,7 +9,6 @@ from buddy.compiler.ops import linalg
 
 
 def squared_sum(x, y):
-    # return (x * x).to(torch.float32).to(torch.float16) + (y * y).to(torch.float32).to(torch.float16)
     t1 = (x * x).to(torch.float32)
     t2 = (y * y).to(torch.float32)
     return t1 + t2
