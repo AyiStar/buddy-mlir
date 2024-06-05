@@ -1,3 +1,19 @@
+//===- f16test-main.cpp -----------------------------------------------------===//
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+//===----------------------------------------------------------------------===//
+
 #include <buddy/Core/Container.h>
 #include <string>
 #include <iostream>
@@ -12,30 +28,10 @@ using bp16_t = uint16_t;
 
 extern "C" void _mlir_ciface_forward(MemRef<float, 1> *, MemRef<bp16_t, 1> *, MemRef<fp16_t, 1> *);
 
-// ----------------- FP16/BP16 <-> Float32 conversion utils ----------------------
-// ----------------- Float16<->Float32 conversion builtins ----------------------
+// ----------------- FP16/BP16 <-> F32 conversion utils & builtins ----------------------
 extern "C" fp16_t __gnu_f2h_ieee(float f);
 extern "C" float __gnu_h2f_ieee(fp16_t hf);
 extern "C" bp16_t __truncsfbf2(float f);
-
-// static fp16_t float2half(float f) {
-//   return __gnu_f2h_ieee(f);
-// }
-// static float half2float(fp16_t hf) {
-//    return __gnu_h2f_ieee(hf);
-// }
-
-union Float32Bits {
-  uint32_t u;
-  float f;
-};
-
-static const uint32_t kF32MantiBits = 23;
-static const uint32_t kF32HalfMantiBitDiff = 13;
-static const uint32_t kF32HalfBitDiff = 16;
-static const Float32Bits kF32Magic = {113 << kF32MantiBits};
-static const uint32_t kF32HalfExpAdjust = (127 - 15) << kF32MantiBits;
-static const uint32_t kF32BfMantiBitDiff = 16;
 
 static fp16_t float2half(float f) {
   return __gnu_f2h_ieee(f);
@@ -50,9 +46,13 @@ static bp16_t float2bfloat(float floatValue) {
 
 // Converts the 16 bit representation of a bfloat value to a float value. This
 // implementation is adapted from Eigen.
+union Float32Bits {
+  uint32_t u;
+  float f;
+};
 float bfloat2float(bp16_t bfloatBits) {
   Float32Bits floatBits;
-  floatBits.u = static_cast<uint32_t>(bfloatBits) << kF32BfMantiBitDiff;
+  floatBits.u = static_cast<uint32_t>(bfloatBits) << 16;
   return floatBits.f;
 }
 
