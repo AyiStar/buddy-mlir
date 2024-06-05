@@ -258,6 +258,9 @@ class Graph:
                     np_type = np.dtype(np.float32)
                 case "f16":
                     np_type = np.dtype(np.float16)
+                case "bf16":
+                    # TODO
+                    np_type = np.dtype(np.float16)
                 case _:
                     raise NotImplementedError(f"Unsupported dtype {dtype}")
             self._output_memref.append(
@@ -397,6 +400,8 @@ class GraphImporter:
                 return ir.IntegerType.get_signless(1)
             case TensorDType.Float16:
                 return ir.F16Type.get()
+            case TensorDType.BFloat16:
+                return ir.BF16Type.get()
             case _:
                 raise NotImplementedError(f"Unsupported dtype {dtype}")
 
